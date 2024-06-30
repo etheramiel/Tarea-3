@@ -36,8 +36,8 @@ class registro_cuentas {
  cuenta obtener(std::string rol); // Dado el rol, devuelve la cuenta con ese rol                                               LISTO
  void agregar(cuenta c); // Se agrega una cuenta a la tabla                                                                    LISTO
  void eliminar(std::string rol); // Se elimina la cuenta                                                                       LISTO
- void modificar(std::string rol, std::string descripcion); // Se modifica la descripcion del rol
- void redimensionar(int n); // Se redimensiona la tabla a n espacios                                                          LISTO
+ void modificar(std::string rol, std::string descripcion); // Se modifica la descripcion del rol                               LISTO
+ void redimensionar(int n); // Se redimensiona la tabla a n espacios                                                           LISTO
  void estadisticas(); // Debe mostrar las estadisticas
 };
 
@@ -136,7 +136,7 @@ cuenta registro_cuentas::obtener(std::string rol){
     }
 
     if(tabla[index].rol != rol){
-        std::cout << "No se encontro la cuenta" << std::endl;
+        std::cout << "ROL NO EXISTENTE" << std::endl;
         return tabla[index];
     }
 
@@ -160,9 +160,11 @@ void registro_cuentas::eliminar(std::string rol){
     }
 
     if(tabla[index].rol != rol){
-        std::cout << "No se encontro la cuenta" << std::endl;
+        std::cout << "No existe la cuenta a eliminar" << std::endl;
         return;  
     }
+
+
 
     tabla[index].rol = "";
     tabla[index].nombre = "";
@@ -172,7 +174,37 @@ void registro_cuentas::eliminar(std::string rol){
 
 }
 
+//Modificar la descripcion de una cuenta
+void registro_cuentas::modificar(std::string rol, std::string descripcion){
+    
+    int index = hash(rol);
+    int i = 1;
 
+    while(tabla[index].rol != rol && i <= ranuras){
+        index = p(rol, i);
+        i++;
+    }
+
+    if(tabla[index].rol != rol){
+        
+        return;  
+    }
+
+    
+    
+    tabla[index].descripcion = descripcion;
+    
+    return;
+
+}
+
+//Funcion para mostrar estadisticas 
+void registro_cuentas::estadisticas(){
+    std::cout << "RANURAS OCUPADAS: " << ranuras_ocupadas << std::endl;
+    std::cout << "RANURAS TOTALES: " << ranuras << std::endl;
+    std::cout << "FACTOR DE CARGA: " << factor_de_carga << std::endl;
+    return;
+}
 
 
 int main(){
