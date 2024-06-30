@@ -4,17 +4,11 @@
 #include <sstream>
 
 /*
-AGREGAR QUE IMPRIMA ROL YA EXISTENTE EN LA FUNCION AGREGAR SI ES QUE EXISTE
-AGREGAR QUE IMPRIMA ROL NO EXISTENTE EN LA FUNCION QUITAR SI ES QUE NO EXISTE
-LO MISMO DE ARRIBA PERO EN LA FUNCION MODIFICAR
+
 
 Hacer documentacion
 
-Arreglar fin lectura archivo https://discord.com/channels/1215059900179152906/1253182879006068809
-
 Quizas cambiar el manejo de colisiones a algo mas complejo ejemplo: https://discord.com/channels/1215059900179152906/1253459083235819622
-
-
 
 */
 
@@ -93,6 +87,11 @@ void registro_cuentas::agregar(cuenta c){
     int index = hash(c.rol);
     int i = 0;
 
+
+    if(tabla[index].rol == c.rol){
+        std::cout << "ROL YA EXISTENTE" << std::endl;
+        return;
+    }
 
 
     while(tabla[index].rol != ""){
@@ -175,7 +174,8 @@ void registro_cuentas::eliminar(std::string rol){
     }
 
     if(tabla[index].rol != rol){
-        return;  
+        std::cout << "ROL NO EXISTENTE" << std::endl;
+        return;
     }
 
 
@@ -200,9 +200,11 @@ void registro_cuentas::modificar(std::string rol, std::string descripcion){
         i++;
     }
 
+    
+
     if(tabla[index].rol != rol){
-        
-        return;  
+        std::cout << "ROL NO EXISTENTE" << std::endl;
+        return;
     }
 
     
@@ -317,7 +319,13 @@ void instrucciones(std::string nombre_archivo){
 
         } else if (comando == "FIN") {
             break;
+
+        }else{
+            break;
         }
+
+        
+        
     }
     delete[] instrucciones;
 }
