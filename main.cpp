@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include <sstream>
 
 
 
@@ -38,7 +38,7 @@ class registro_cuentas {
  void eliminar(std::string rol); // Se elimina la cuenta                                                                       LISTO
  void modificar(std::string rol, std::string descripcion); // Se modifica la descripcion del rol                               LISTO
  void redimensionar(int n); // Se redimensiona la tabla a n espacios                                                           LISTO
- void estadisticas(); // Debe mostrar las estadisticas
+ void estadisticas(); // Debe mostrar las estadisticas                                                                         LISTO
 };
 
 //Función hash
@@ -54,11 +54,12 @@ int registro_cuentas::hash(std::string rol){
 }
 
 
+
+
 //Caso de colisión cuadrática
 int registro_cuentas::p(std::string rol, int i){
     
     int hash_inicial = hash(rol);
-
     return (hash_inicial + i * i) % ranuras;
 }
 
@@ -84,8 +85,6 @@ void registro_cuentas::agregar(cuenta c){
     tabla[index].rol = c.rol;
     tabla[index].nombre = c.nombre;
     tabla[index].descripcion = c.descripcion;
-    std::cout << "Index final: " << index << std::endl;
-    std::cout << "Cuenta agregada" << std::endl;
 
     ranuras_ocupadas++;
 
@@ -140,10 +139,8 @@ cuenta registro_cuentas::obtener(std::string rol){
         return tabla[index];
     }
 
-    std::cout << "Rol: " << tabla[index].rol << std::endl;
-    std::cout << "Nombre: " << tabla[index].nombre << std::endl;
-    std::cout << "Descripcion: " << tabla[index].descripcion << std::endl;
-
+    std::cout << tabla[index].nombre << " " << tabla[index].descripcion << std::endl;
+    
     return tabla[index];
 }
 
@@ -160,7 +157,6 @@ void registro_cuentas::eliminar(std::string rol){
     }
 
     if(tabla[index].rol != rol){
-        std::cout << "No existe la cuenta a eliminar" << std::endl;
         return;  
     }
 
@@ -207,6 +203,104 @@ void registro_cuentas::estadisticas(){
 }
 
 
+
+/*****
+* void leer_instrucciones
+******
+*  Lee las instrucciones de un archivo de texto y las almacena en un arreglo de strings.
+******
+* Input: 
+* std::string nombre_archivo : Nombre del archivo de texto que contiene las instrucciones.
+* std::string *&instrucciones : Referencia a un puntero de string donde se almacenarán las instrucciones.
+* int &numInstrucciones : Referencia a un entero donde se almacenará el número de instrucciones.
+*  
+******
+* Returns: Nada, pero almacena las instrucciones en un arreglo de strings.
+* 
+*****/
+
+void leer_instrucciones(std::string nombre_archivo, std::string *&instrucciones, int &numInstrucciones){
+    #include <fstream>
+    std::ifstream archivo(nombre_archivo);
+    if (archivo.is_open()) {
+        std::string linea;
+        while (std::getline(archivo, linea)) {
+            numInstrucciones++;
+        }
+        archivo.clear(); // Restablecer el puntero del archivo al inicio
+        archivo.seekg(0, std::ios::beg); // Mover el puntero del archivo al inicio
+
+        // Reservar memoria para el arreglo de instrucciones
+        instrucciones = new std::string[numInstrucciones];
+
+        // Leer las instrucciones del archivo y almacenarlas en el arreglo
+        int i = 0;
+        while (std::getline(archivo, linea)) {
+            instrucciones[i++] = linea;
+        }
+
+        archivo.close();
+    } else {
+        std::cerr << "Error: No se pudo abrir el archivo " << nombre_archivo << std::endl;
+    }
+
+}
+
+
+
+/*****
+* void instrucciones
+******
+*  Lee las instrucciones de un archivo de texto y las ejecuta sobre la clase registro_cuentas.
+******
+* Input: std::string nombre_archivo : Nombre del archivo de texto que contiene las instrucciones.
+*  
+******
+* Returns: Nada, pero ejecuta las instrucciones sobre la clase registro_cuentas.
+* 
+*****/
+
+void instrucciones(std::string nombre_archivo){
+    std::string *instrucciones;
+    int numInstrucciones = 0;
+    leer_instrucciones(nombre_archivo, instrucciones, numInstrucciones);
+    registro_cuentas accion;
+    for (int i = 0; i < numInstrucciones; i++) {
+        std::string instruccion = instrucciones[i];
+        std::istringstream ss(instruccion);
+        std::string comando;
+        ss >> comando;
+        if (comando == "AGREGAR") {
+            std::string rol, nombre, descripcion;
+            ss >> rol >> nombre >> descripcion;
+            accion.agregar({rol, nombre, descripcion});
+
+            
+        } else if (comando == "QUITAR") {
+            std::string rol;
+            ss >> rol;
+            accion.eliminar(rol);
+
+        } else if (comando == "MODIFICAR") {
+            std::string rol, descripcion;
+            ss >> rol >> descripcion;
+            accion.modificar(rol, descripcion);
+
+        } else if (comando == "OBTENER") {
+            std::string rol;
+            ss >> rol;
+            accion.obtener(rol);
+
+        } else if (comando == "ESTADISTICAS") {
+            accion.estadisticas();
+
+        } else if (comando == "FIN") {
+            break;
+        }
+    }
+    delete[] instrucciones;
+}
+
 int main(){
 
     registro_cuentas registro;
@@ -229,8 +323,6 @@ int main(){
     registro.obtener("12345679-8");
 
 
-
-
-return 0;
+    return 0;
 
 }
