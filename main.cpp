@@ -10,6 +10,12 @@ LO MISMO DE ARRIBA PERO EN LA FUNCION MODIFICAR
 
 Hacer documentacion
 
+Arreglar fin lectura archivo https://discord.com/channels/1215059900179152906/1253182879006068809
+
+Quizas cambiar el manejo de colisiones a algo mas complejo ejemplo: https://discord.com/channels/1215059900179152906/1253459083235819622
+
+
+
 */
 
 
@@ -56,7 +62,8 @@ class registro_cuentas {
 int registro_cuentas::hash(std::string rol){
     
     unsigned long index = 0; 
-    for(int i = 0; i < 10; i++){
+    int longitud = rol.length();
+    for(int i = 0; i < longitud; i++){
         index += rol[i];
     }
     
