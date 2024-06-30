@@ -3,6 +3,17 @@
 #include <fstream>
 #include <sstream>
 
+/*
+AGREGAR QUE IMPRIMA ROL YA EXISTENTE EN LA FUNCION AGREGAR SI ES QUE EXISTE
+AGREGAR QUE IMPRIMA ROL NO EXISTENTE EN LA FUNCION QUITAR SI ES QUE NO EXISTE
+LO MISMO DE ARRIBA PERO EN LA FUNCION MODIFICAR
+
+Hacer documentacion
+
+*/
+
+
+
 
 
 struct cuenta {
@@ -302,6 +313,12 @@ void instrucciones(std::string nombre_archivo){
 }
 
 int main(){
+    
+    instrucciones("prueba.txt");
+
+
+    //despues eliminar todo lo de abajo. solo son para probar
+
 
     registro_cuentas registro;
     cuenta c1;
