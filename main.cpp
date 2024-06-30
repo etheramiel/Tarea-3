@@ -105,9 +105,9 @@ void registro_cuentas::agregar(cuenta c){
     tabla[index].descripcion = c.descripcion;
 
     ranuras_ocupadas++;
+    factor_de_carga = static_cast<float>(ranuras_ocupadas) / ranuras;
 
-    factor_de_carga = (float)ranuras_ocupadas / (float)ranuras;
-
+    return;
 
 }
 
@@ -135,7 +135,7 @@ void registro_cuentas::redimensionar(int n){
     delete[] tabla;
     tabla = tabla_nueva;
     ranuras = n;
-    factor_de_carga = (float)ranuras_ocupadas / (float)ranuras;
+    factor_de_carga = static_cast<float>(ranuras_ocupadas) / ranuras;
     
 }
 
@@ -184,6 +184,7 @@ void registro_cuentas::eliminar(std::string rol){
     tabla[index].nombre = "";
     tabla[index].descripcion = "";
     ranuras_ocupadas--;
+   factor_de_carga = static_cast<float>(ranuras_ocupadas) / ranuras;
     return;
 
 }
@@ -214,6 +215,8 @@ void registro_cuentas::modificar(std::string rol, std::string descripcion){
 
 //Funcion para mostrar estadisticas 
 void registro_cuentas::estadisticas(){
+
+
     std::cout << "RANURAS OCUPADAS: " << ranuras_ocupadas << std::endl;
     std::cout << "RANURAS TOTALES: " << ranuras << std::endl;
     std::cout << "FACTOR DE CARGA: " << factor_de_carga << std::endl;
@@ -327,7 +330,7 @@ int main(){
     //despues eliminar todo lo de abajo. solo son para probar
 
 
-    registro_cuentas registro;
+    /*registro_cuentas registro;
     cuenta c1;
     c1.rol = "12345678-9";
     c1.nombre = "Juan Perez";
@@ -345,7 +348,7 @@ int main(){
 
     registro.eliminar("12345679-8");
     registro.obtener("12345679-8");
-
+    */
 
     return 0;
 
