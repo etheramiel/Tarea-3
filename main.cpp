@@ -3,18 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-/*
-
-
-Hacer documentacion
-
-Quizas cambiar el manejo de colisiones a algo mas complejo ejemplo: https://discord.com/channels/1215059900179152906/1253459083235819622
-
-*/
-
-
-
-
 
 struct cuenta {
  // El rol es el identificador de la persona.
@@ -35,8 +23,8 @@ class registro_cuentas {
  cuenta *tabla; // Aca se almacenaran los elementos de la tabla
  int ranuras = 15; // Cuantas ranuras tiene la tabla hash (inicialmente)
 
- int hash(std::string rol); // Se obtiene el hash dado el rol                                                                   LISTO
- int p(std::string rol, int i); // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i                 LISTO
+ int hash(std::string rol); // Se obtiene el hash dado el rol                                                                   
+ int p(std::string rol, int i); // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i                 
  public:
  registro_cuentas() {
     tabla = new cuenta[ranuras];
@@ -44,15 +32,27 @@ class registro_cuentas {
     ~registro_cuentas() {
         delete[] tabla;
     } // Destructor
- cuenta obtener(std::string rol); // Dado el rol, devuelve la cuenta con ese rol                                               LISTO
- void agregar(cuenta c); // Se agrega una cuenta a la tabla                                                                    LISTO
- void eliminar(std::string rol); // Se elimina la cuenta                                                                       LISTO
- void modificar(std::string rol, std::string descripcion); // Se modifica la descripcion del rol                               LISTO
- void redimensionar(int n); // Se redimensiona la tabla a n espacios                                                           LISTO
- void estadisticas(); // Debe mostrar las estadisticas                                                                         LISTO
+ cuenta obtener(std::string rol); // Dado el rol, devuelve la cuenta con ese rol                                               
+ void agregar(cuenta c); // Se agrega una cuenta a la tabla                                                                   
+ void eliminar(std::string rol); // Se elimina la cuenta                                                                       
+ void modificar(std::string rol, std::string descripcion); // Se modifica la descripcion del rol                               
+ void redimensionar(int n); // Se redimensiona la tabla a n espacios                                                           
+ void estadisticas(); // Debe mostrar las estadisticas                                                                         
 };
 
-//Función hash
+/*****
+* int registro_cuentas::hash
+******
+*  Obtiene el hash dado el rol.
+******
+* Input: 
+* std::string rol : Rol de la cuenta a agregar.
+*  
+******
+* Returns:
+* int : Hash del rol.
+* 
+*****/
 int registro_cuentas::hash(std::string rol){
     
     unsigned long index = 0; 
@@ -68,19 +68,43 @@ int registro_cuentas::hash(std::string rol){
 
 
 
-//Caso de colisión cuadrática
+/*****
+* int registro_cuentas::p
+******
+*  Obtiene la ranura a revisar en caso de colisión dado el rol y el intento i.
+******
+* Input: 
+* std::string rol : Rol de la cuenta a agregar.
+* int i : Intento de colisión.
+*  
+******
+* Returns:
+* int : Ranura a revisar en caso de colisión.
+* 
+*****/
 int registro_cuentas::p(std::string rol, int i){
     
-    int hash_inicial = hash(rol);
-    return (hash_inicial + i * i) % ranuras;
+    return (hash(rol) + i) % ranuras;
+
 }
 
 
-//Funcion para agregar una cuenta
+/*****
+* void registro_cuentas::agregar
+******
+*  Agrega una cuenta a la tabla hash.
+******
+* Input: 
+* cuenta c : Cuenta a agregar.
+*  
+******
+* Returns: Nada, pero agrega una cuenta a la tabla hash.
+* 
+*****/
 void registro_cuentas::agregar(cuenta c){
 
     if(factor_de_carga >= FACTOR_CARGA_MAXIMO){
-        redimensionar(ranuras * 2);
+        redimensionar(ranuras * 1.5);
     }
 
 
@@ -116,7 +140,18 @@ void registro_cuentas::agregar(cuenta c){
 
 
 
-//Funcion para redimensionar la tabla
+/*****
+* void registro_cuentas::redimensionar
+******
+*  Modifica la tabla hash a un tamaño n.
+******
+* Input: 
+* int n : Nuevo tamaño de la tabla hash.
+*  
+******
+* Returns: Nada, pero modifica la tabla hash a un tamaño n.
+* 
+*****/
 void registro_cuentas::redimensionar(int n){
     
     cuenta *tabla_nueva = new cuenta[n];
@@ -140,7 +175,19 @@ void registro_cuentas::redimensionar(int n){
 
 
 
-//Funcion para obtener una cuenta
+/*****
+* void registro_cuentas::obtener
+******
+*  Obtiene los datos de un rol en la tabla hash.
+******
+* Input: 
+* std::string rol : Rol de la cuenta a obtener.
+*  
+******
+* Returns: 
+* cuenta Cuenta con el rol especificado
+* 
+*****/
 cuenta registro_cuentas::obtener(std::string rol){
     
     int index = hash(rol);
@@ -162,7 +209,18 @@ cuenta registro_cuentas::obtener(std::string rol){
 }
 
 
-//Funcion para eliminar una cuenta
+/*****
+* void registro_cuentas::eliminar
+******
+*  Elimina un rol de la tabla hash.
+******
+* Input: 
+* std::string rol : Rol de la cuenta a eliminar.
+*  
+******
+* Returns: Nada, pero elimina un rol de la tabla hash.
+* 
+*****/
 void registro_cuentas::eliminar(std::string rol){
     
     int index = hash(rol);
@@ -179,7 +237,7 @@ void registro_cuentas::eliminar(std::string rol){
     }
 
 
-
+    delete(&tabla[index].rol);
     tabla[index].rol = "";
     tabla[index].nombre = "";
     tabla[index].descripcion = "";
@@ -189,7 +247,19 @@ void registro_cuentas::eliminar(std::string rol){
 
 }
 
-//Modificar la descripcion de una cuenta
+/*****
+* void registro_cuentas::modificar
+******
+*  Modifica la descripcion de un rol en la tabla hash.
+******
+* Input: 
+* std::string rol : Rol de la cuenta a modificar.
+* std::string descripcion : Nueva descripcion de la cuenta.
+*  
+******
+* Returns: Nada, pero modifica la descripcion de un rol en la tabla hash.
+* 
+*****/
 void registro_cuentas::modificar(std::string rol, std::string descripcion){
     
     int index = hash(rol);
@@ -215,7 +285,18 @@ void registro_cuentas::modificar(std::string rol, std::string descripcion){
 
 }
 
-//Funcion para mostrar estadisticas 
+/*****
+* void registro_cuentas::estadisticas
+******
+*  Muestra las estadisticas de la tabla hash.
+******
+* Input: 
+* Nada
+*  
+******
+* Returns: Nada, pero imprime las estadisticas de la tabla hash.
+* 
+*****/
 void registro_cuentas::estadisticas(){
 
 
@@ -330,34 +411,21 @@ void instrucciones(std::string nombre_archivo){
     delete[] instrucciones;
 }
 
+
+/*****
+* int main
+******
+*  Función principal del programa que ejecuta las instrucciones de un archivo de texto llamado "prueba.txt".
+******
+* Input: 
+* Nada
+*  
+******
+* Returns:
+* int : 0
+* 
+*****/
 int main(){
-    
     instrucciones("prueba.txt");
-
-
-    //despues eliminar todo lo de abajo. solo son para probar
-
-
-    /*registro_cuentas registro;
-    cuenta c1;
-    c1.rol = "12345678-9";
-    c1.nombre = "Juan Perez";
-    c1.descripcion = "Estudiante";
-    registro.agregar(c1);
-    registro.obtener("12345678-9");
-
-
-    
-    c1.rol = "12345679-8";
-    c1.nombre = "Pedro Perez";
-    c1.descripcion = "Profesor";
-    registro.agregar(c1);
-    registro.obtener("12345679-8");
-
-    registro.eliminar("12345679-8");
-    registro.obtener("12345679-8");
-    */
-
     return 0;
-
 }
