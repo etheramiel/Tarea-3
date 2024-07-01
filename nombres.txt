@@ -1,5 +1,5 @@
 Katherine Huidobro 202304656-6 200
-Hizo
+Hizo las funciones hash, p, obtener y agregar. Ayudó en la funcion para leer el archivo.
 
 Martin Pardo 202304574-8 200
-Hizo 
+Hizo las funciones eliminar, modificar, redimensionar y estadisticas. Hizo las funciones para abrir el archivo y ejecuar las instrucciones.
